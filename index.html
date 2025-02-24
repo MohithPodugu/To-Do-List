@@ -30,10 +30,22 @@ ul {
 li {
   padding: 10px;
   border-bottom: 1px solid #ccc;
+  display: flex;
+  align-items: center;
 }
 .completed {
   text-decoration: line-through;
   color: #aaa;
+}
+.edit-input {
+  display: none;
+  margin-left: 10px;
+}
+.edit-button, .delete-button {
+  margin-left: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 </style>
 </head>
@@ -45,28 +57,70 @@ li {
   <button onclick="addTask()">Add</button>
 
   <ul id="task-list">
-    </ul>
+  </ul>
 </div>
 
 <script>
 function addTask() {
   var taskInput = document.getElementById("new-task");
   var taskList = document.getElementById("task-list");
+  var taskText = taskInput.value.trim();
 
-  // Create list item
-  var listItem = document.createElement("li");
-  listItem.innerText = taskInput.value;
+  if (taskText !== "") {
+    // Create list item
+    var listItem = document.createElement("li");
+    listItem.innerText = taskText;
 
-  // Add click event to mark as complete
-  listItem.addEventListener("click", function() {
-    listItem.classList.toggle("completed");
+    // Add click event to mark as complete
+    listItem.addEventListener("click", function(event) {
+      if (event.target === listItem) {
+        listItem.classList.toggle("completed");
+      }
+    });
+
+    // Create edit button
+    var editButton = document.createElement("button");
+    editButton.classList.add("edit-button");
+    editButton.innerHTML = '<i class="fas fa-edit"></i>';
+    editButton.addEventListener("click", function() {
+      editTask(listItem);
+    });
+    listItem.appendChild(editButton);
+
+    // Create delete button
+    var deleteButton = document.createElement("button");
+    deleteButton.classList.add("delete-button");
+    deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+    deleteButton.addEventListener("click", function() {
+      deleteTask(listItem);
+    });
+    listItem.appendChild(deleteButton);
+
+    // Add list item to the list
+    taskList.appendChild(listItem);
+
+    // Clear the input field
+    taskInput.value = "";
+  }
+}
+
+function deleteTask(taskItem) {
+  taskItem.remove();
+}
+
+function editTask(taskItem) {
+  var currentTaskText = taskItem.innerText;
+  var editInput = document.createElement("input");
+  editInput.type = "text";
+  editInput.classList.add("edit-input");
+  editInput.value = currentTaskText;
+  taskItem.appendChild(editInput);
+  editInput.focus();
+
+  editInput.addEventListener("blur", function() {
+    taskItem.innerText = this.value;
+    taskItem.appendChild(taskItem.lastElementChild); // Reattach the buttons
   });
-
-  // Add list item to the list
-  taskList.appendChild(listItem);
-
-  // Clear the input field
-  taskInput.value = "";
 }
 </script>
 
