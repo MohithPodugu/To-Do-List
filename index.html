@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>To-Do List</title>
+<style>
+body {
+  font-family: sans-serif;
+}
+.container {
+  width: 50%;
+  margin: 0 auto;
+}
+input[type="text"] {
+  padding: 10px;
+  width: 80%;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+button {
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+.completed {
+  text-decoration: line-through;
+  color: #aaa;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>To-Do List</h1>
+  <input type="text" id="new-task" placeholder="Add a new task...">
+  <button onclick="addTask()">Add</button>
+
+  <ul id="task-list">
+    </ul>
+</div>
+
+<script>
+function addTask() {
+  var taskInput = document.getElementById("new-task");
+  var taskList = document.getElementById("task-list");
+
+  // Create list item
+  var listItem = document.createElement("li");
+  listItem.innerText = taskInput.value;
+
+  // Add click event to mark as complete
+  listItem.addEventListener("click", function() {
+    listItem.classList.toggle("completed");
+  });
+
+  // Add list item to the list
+  taskList.appendChild(listItem);
+
+  // Clear the input field
+  taskInput.value = "";
+}
+</script>
+
+</body>
+</html>
